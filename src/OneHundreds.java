@@ -12,26 +12,42 @@ import java.util.concurrent.atomic.AtomicReference;
  * class OneHundred
  */
 public class OneHundreds {
+    /**
+     * get input from user for number of player adn get name of players
+     * create deck of cards and shuffle the deck
+     * call the playGame method
+     *
+     * @param args
+     */
     public static void main(String[] args) {
-        //fixme add print out for each round and see which card wins.
-        //todo add range 2-4 if outside error
-        System.out.println("Enter Number of Players: (2-4) ");
+        System.out.println("=====One Hundreds=====");
         Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
-        int i = 1;
+        int input=0;
+        while(true){
+            System.out.println("Enter Number of Players: (2-4) ");
+            input = scanner.nextInt();
+            if (input < 2 || input >4){
+                continue;
 
-        LinkedList<Player> playerLinkedList = new LinkedList<Player>();
+            }else{
+                break;
+            }
+
+        }
+
+        int i = 1;
+        LinkedList<Player> playerLinkedList = new LinkedList<>();
         while (i <= input){
             System.out.println("Enter name for Player " + i + ": ");
             String name = scanner.next();
-            LinkedList<Card> hand = new LinkedList<Card>();
+            LinkedList<Card> hand = new LinkedList<>();
             Player player = new Player(name, hand);
             playerLinkedList.add(player);
             i++;
 
         }
 
-        HashMap<String, Integer> scores = new HashMap<String, Integer>();
+        HashMap<String, Integer> scores = new HashMap<>();
         for(Player player : playerLinkedList){
             scores.put(player.getName(), 0);
         }
@@ -41,9 +57,7 @@ public class OneHundreds {
 
 
         dealCards(playerLinkedList, deckOfCards);
-        //playGame(playerLinkedList, scores);
-        //playGame2(playerLinkedList, scores);
-        playGame3(playerLinkedList, scores);
+        playGame(playerLinkedList, scores);
 
         if(CardDeck.cardsRemaining(deckOfCards) != 0){
             System.out.println("Remaining cards");
@@ -54,18 +68,21 @@ public class OneHundreds {
 
         //display score
         AtomicInteger maxWins = new AtomicInteger();
-        AtomicReference<String> winner = new AtomicReference<>();
+        //AtomicReference<String> winner = new AtomicReference<>();
         System.out.println("\n===Final SCORE===");
         scores.forEach((name, score) ->{
             System.out.println(name + " Score: " + score);
             if(score > maxWins.get()){
                 maxWins.set(score);
-                winner.set(name);
+                //winner.set(name);
             }
         });
         System.out.println("\nAnd the winner is....");
-        System.out.println(winner +" - " +maxWins);
-
+        scores.forEach((name, score)->{
+            if(score == maxWins.get()){
+                System.out.println(name +" - " +maxWins);
+            }
+        });
 
     }
 
@@ -82,50 +99,18 @@ public class OneHundreds {
                 player.getHand().add(deckOfCards.get(0));
                 deckOfCards.remove(0);
             }
-            //System.out.println("Deck size" + deckOfCards.size());
         }while(deckOfCards.size() >= playerLinkedList.size());
     }
 
-    public static void playGame(LinkedList<Player> playerLinkedList, HashMap<String, Integer> scores){
-        int i = 0;
-        while (i < playerLinkedList.getFirst().getHand().size()){
-            LinkedList<Card> comparePlayerCards = new LinkedList<Card>();
-            for(Player player : playerLinkedList){
-                System.out.println(player.getName() + player.getHand().get(i).getValue());
-                Card card = player.getHand().get(i);
-                comparePlayerCards.add(card);
-            }
-            String winnerName = Card.compareTo3(comparePlayerCards.get(0), comparePlayerCards.get(1), playerLinkedList);
-            int winCount = scores.get(winnerName);
-            scores.put(winnerName, winCount + 1);
-            i++;
-            System.out.println(scores);
-
-        }
-
-    }
 
     /**
-     * for players in the playerLinkedList
+     * for players in the playerLinkedList get the first card in the player's hadn and add it to the comparePlayerCardsList
+     * if the current player's card beats the winningPlayer's card, they are the winner and will be used in the next iteration of the loop
      *
      * @param playerLinkedList playerLinkedList
      * @param scores scores
      */
-    public static void playGame2(LinkedList<Player> playerLinkedList, HashMap<String, Integer> scores){
-        int i = 0;
-        //LinkedList<Card> comparePlayerCards = new LinkedList<Card>();
-        for(Player player : playerLinkedList){
-            System.out.println(player.getName() + player.getHand().get(i).getValue());
-            //Card card = player.getHand().get(i);
-            //comparePlayerCards.add(card);
-        }
-        Card.compareTo2(playerLinkedList.get(0), playerLinkedList.get(1), scores, playerLinkedList);
-        System.out.println("CompareTo2: scores- "+ scores);
-
-
-    }
-
-    public static void playGame3(LinkedList<Player> playerLinkedList, HashMap<String, Integer> scores){
+    public static void playGame(LinkedList<Player> playerLinkedList, HashMap<String, Integer> scores){
         do{
             LinkedList<Card> comparePlayerCardsList = new LinkedList<Card>();
             int winningPlayer = 0;

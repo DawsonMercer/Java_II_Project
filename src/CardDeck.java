@@ -22,26 +22,23 @@ public class CardDeck {
         ArrayList<Card> deck = new ArrayList<Card>();
 
         ArrayList<Integer> wildcardsArray = new ArrayList<Integer>();
+        StringBuilder printWildCards = new StringBuilder("WildCards: ");
         while (wildcardsArray.size() < 4) {
           int random =ThreadLocalRandom.current().nextInt(min, max + 1);
           if (!wildcardsArray.contains(random)) {
               wildcardsArray.add(random);
+              printWildCards.append(random).append(" ");
           }
         }
-        //System.out.println("without duplicates"+ wildcardsArray);
+        System.out.println(printWildCards);
         while (value < max+1){
           Card card = new Card(value, false);
           deck.add(card);
           if (wildcardsArray.contains(card.getValue())){
-              System.out.println("WildCard " + card.getValue());
               card.setWildcard(true);
           }
           value ++;
         }
-//        System.out.println(wildcardsArray);
-//        for (Card card : deck){
-//          System.out.println(card.getValue() + " - " + card.isWildcard());
-//        }
         return deck;
     }
 
