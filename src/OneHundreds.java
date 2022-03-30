@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class OneHundreds {
     public static void main(String[] args) {
-
+        //fixme add print out for each round and see which card wins.
         //todo add range 2-4 if outside error
         System.out.println("Enter Number of Players: (2-4) ");
         Scanner scanner = new Scanner(System.in);
@@ -41,26 +41,29 @@ public class OneHundreds {
 
 
         dealCards(playerLinkedList, deckOfCards);
-        playGame(playerLinkedList, scores);
+        //playGame(playerLinkedList, scores);
         //playGame2(playerLinkedList, scores);
+        playGame3(playerLinkedList, scores);
+
         if(CardDeck.cardsRemaining(deckOfCards) != 0){
             System.out.println("Remaining cards");
             for(Card card : deckOfCards){
-                System.out.println("Value: "+card.getValue() + "- Wild:"+ card.isWildcard());
+                System.out.println("Value: "+card.getValue() + (card.isWildcard() ? "-WILD" : ""));
             }
         }
 
         //display score
         AtomicInteger maxWins = new AtomicInteger();
         AtomicReference<String> winner = new AtomicReference<>();
+        System.out.println("\n===Final SCORE===");
         scores.forEach((name, score) ->{
-            System.out.println("Name: " + name + " Score: " + score);
+            System.out.println(name + " Score: " + score);
             if(score > maxWins.get()){
                 maxWins.set(score);
                 winner.set(name);
             }
         });
-        System.out.println("And the winner is....");
+        System.out.println("\nAnd the winner is....");
         System.out.println(winner +" - " +maxWins);
 
 
@@ -92,7 +95,7 @@ public class OneHundreds {
                 Card card = player.getHand().get(i);
                 comparePlayerCards.add(card);
             }
-            String winnerName = Card.compareTo(comparePlayerCards.get(0), comparePlayerCards.get(1), playerLinkedList);
+            String winnerName = Card.compareTo3(comparePlayerCards.get(0), comparePlayerCards.get(1), playerLinkedList);
             int winCount = scores.get(winnerName);
             scores.put(winnerName, winCount + 1);
             i++;
@@ -119,6 +122,29 @@ public class OneHundreds {
         Card.compareTo2(playerLinkedList.get(0), playerLinkedList.get(1), scores, playerLinkedList);
         System.out.println("CompareTo2: scores- "+ scores);
 
+
+    }
+
+    public static void playGame3(LinkedList<Player> playerLinkedList, HashMap<String, Integer> scores){
+        do{
+            LinkedList<Card> comparePlayerCardsList = new LinkedList<Card>();
+            int winningPlayer = 0;
+            for(Player player: playerLinkedList){
+                Card card = player.getHand().get(0);
+                player.getHand().remove(0);
+                System.out.println(player.getName() + " - " + card.getValue() +(card.isWildcard() ? "-WILD" : ""));
+                comparePlayerCardsList.add(card);
+                if(card.compareTo(comparePlayerCardsList.get(winningPlayer))>0){
+                    winningPlayer = playerLinkedList.indexOf(player);
+                }
+            }
+            String winnersName = playerLinkedList.get(winningPlayer).getName();
+            System.out.println("Winner: "+ winnersName + " " + comparePlayerCardsList.get(winningPlayer).getValue() + (comparePlayerCardsList.get(winningPlayer).isWildcard() ? "-WILD " : ""));
+            System.out.println("");
+            int totalWins = scores.get(winnersName) +1;
+            scores.put(winnersName, totalWins);
+
+        }while(playerLinkedList.getFirst().getHand().size() > 0);
 
     }
 }

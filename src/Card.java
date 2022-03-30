@@ -7,7 +7,7 @@ import java.util.LinkedList;
  *
  * Class Card
  */
-public class Card {
+public class Card implements Comparable<Card>{
     /**
      * class attributes int value
      * class attribute boolean wildcard
@@ -56,7 +56,7 @@ public class Card {
      * @param playerLinkedList playerLinkedList
      * @return player name
      */
-    public static String compareTo(Card card1, Card card2, LinkedList<Player> playerLinkedList){
+    public static String compareTo3(Card card1, Card card2, LinkedList<Player> playerLinkedList){
         //todo add compare method using collection
         //Add a compareTo method that compares two cards – consider both the value and the wildcard status.
         //fixme
@@ -131,6 +131,30 @@ public class Card {
             player1.getHand().remove(0);
             player2.getHand().remove(0);
             //System.out.println(i);
+        }
+
+    }
+
+    //fixme i think i need to fix this logic
+    //fixme do i need to fix the -1 or 1 ? i have reveresed this recently
+    @Override
+    public int compareTo(Card card2){
+        if(this.getValue() > card2.getValue() && !this.isWildcard() && !card2.isWildcard()){
+            return 1;
+        }else if(this.getValue() < card2.getValue() && !this.isWildcard() && !card2.isWildcard()){
+            return -1;
+        }else if(this.isWildcard() && card2.isWildcard()){
+            if(this.getValue() < card2.getValue()){
+                return 1;
+            }else{
+                return -1;
+            }
+        }else if(this.isWildcard() && !card2.isWildcard()){
+            return 1;
+
+        }else{
+            return -1;
+
         }
 
     }

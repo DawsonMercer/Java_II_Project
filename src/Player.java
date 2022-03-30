@@ -52,7 +52,7 @@ public class Player {
      * print all cards in the players hand
      */
     private void printHand(){
-       hand.forEach(System.out::println);
+       this.hand.forEach(System.out::println);
 
     }
 
