@@ -3,7 +3,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Assignment 4
@@ -74,7 +73,6 @@ public class OneHundreds {
             System.out.println(name + " Score: " + score);
             if(score > maxWins.get()){
                 maxWins.set(score);
-                //winner.set(name);
             }
         });
         System.out.println("\nAnd the winner is....");
